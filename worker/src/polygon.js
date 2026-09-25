@@ -6,7 +6,7 @@ export async function handlePolygonRequest(request, env, corsHeaders) {
 			const { tickersArr, startDate, endDate } = await request.json();
 
 			if(!tickersArr || !Array.isArray(tickersArr) || tickersArr.length === 0 ) {
-				return new Response(JSON.stringify({ error: 'tickersArr must be a non-empty array' }), {
+				return Response.json({ error: 'tickersArr must be a non-empty array' }, {
 					status: 400,
 					headers: corsHeaders
 				})
@@ -37,25 +37,19 @@ export async function handlePolygonRequest(request, env, corsHeaders) {
 			const validStockData = stockData.filter(item => item !== null);
 
 			if (validStockData.length === 0) {
-				return new Response(JSON.stringify( {error: 'No data found for the given tickers/date range' }), {
+				return Response.json({ error: 'No data found for the given tickers/date range' }, {
 					status: 404,
-					headers: {
-						...corsHeaders,
-						'Content-Type': 'application/json'
-					}
+					headers: corsHeaders
 				})
 			}
 
 			// return clean data array back to react client
-			return new Response(JSON.stringify(validStockData), {
-				headers: {
-					...corsHeaders,
-					'Content-Type': 'application/json'
-				},
+			return Response.json(validStockData, {
+				headers: corsHeaders
 			});
 			
 		} catch (e) {
-		     return new Response(JSON.stringify({ error: e.message || e }), {
+		     return Response.json({ error: e.message || e }, {
 				status: 500,
 				headers: corsHeaders
 			})

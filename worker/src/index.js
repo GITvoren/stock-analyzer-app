@@ -16,9 +16,9 @@ export default {
 		}
 
 		if(request.method !== 'POST'){
-			return new Response(JSON.stringify({ error: 'Method not allowed '}), {
+			return Response.json({ error: 'Method not allowed' }, {
 				status: 405,
-				headers:corsHeaders
+				headers: corsHeaders
 			});
 		}
 
@@ -32,7 +32,7 @@ export default {
 			return handleOpenAIRequest(request, env, corsHeaders)
 		}
 
-		return new Response(JSON.stringify({ error: 'Not found' }), {
+		return Response.json({ error: 'Not found' }, {
 			status: 404,
 			headers: corsHeaders
 		});
