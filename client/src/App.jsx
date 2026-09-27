@@ -5,16 +5,34 @@ function App() {
   const [result, setResult] = useState(null);
   const [aiResult, setAiResult] = useState(null);
 
-  async function testFetch() {
+  function formatDate(date) {
+	const yyyy = date.getFullYear();
+	const mm = String(date.getMonth() + 1).padStart(2, '0');
+	const dd = String(date.getDate()).padStart(2, '0');
+	return `${yyyy}-${mm}-${dd}`;
+}
+
+function getLast30Days() {
+	const endDate = new Date();
+	const startDate = new Date();
+	startDate.setDate(startDate.getDate() - 30);
+
+	return {
+		startDate: formatDate(startDate),
+		endDate: formatDate(endDate)
+	};
+}
+
+ async function testFetch() {
+	const { startDate, endDate } = getLast30Days();
+
 	const response = await fetch('http://localhost:8787/polygon', {
 		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
+		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({
-			tickersArr: ['AAPL'],
-			startDate: '2025-06-01',
-			endDate: '2025-06-30'
+			tickersArr: ['V'],
+			startDate,
+			endDate
 		})
 	});
 
@@ -23,13 +41,15 @@ function App() {
 }
 
 async function testOpenAI() {
+	const tickerNames = result.map(stock => stock.ticker);
+
 	const response = await fetch('http://localhost:8787/openai', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify({
-			tickerNames: ['AAPL'],
+			tickerNames,
 			dataString: JSON.stringify(result)
 		})
 	});
