@@ -1,3 +1,42 @@
+// simple moving average indicator
+function calculateSMA(results, period = 20) {
+	if (results.length < period) return null;
+
+	const closes = results.slice(-period).map(day => day.c);
+	const sum = closes.reduce((total, price) => total + price, 0);
+	return sum / period;
+}
+
+// relative strength indicator
+function calculateRSI(results, period = 14) {
+	if (results.length < period + 1) return null;
+
+	const closes = results.slice(-(period + 1)).map(day => day.c);
+
+	let gains = 0;
+	let losses = 0;
+
+	for (let i = 1; i < closes.length; i++) {
+		const change = closes[i] - closes[i - 1];
+		if (change > 0) {
+			gains += change;
+		} else {
+			losses += Math.abs(change);
+		}
+	}
+
+	const avgGain = gains / period;
+	const avgLoss = losses / period;
+
+	if (avgLoss === 0) return 100;
+
+	const rs = avgGain / avgLoss;
+	const rsi = 100 - (100 / (1 + rs));
+
+	return rsi;
+}
+
+
 export async function handlePolygonRequest(request, env, corsHeaders) {
 
      		try {
@@ -30,6 +69,14 @@ export async function handlePolygonRequest(request, env, corsHeaders) {
 				// stripped this out for caching purposes later on
 				delete data.request_id;
 
+				// attach trading indicator values to data for sharper AI analysis
+				const smaValue = calculateSMA(data.results);
+				const rsiValue = calculateRSI(data.results);
+
+				// preserving null if not enough history exists
+				data.sma = smaValue !== null ? Math.round(smaValue * 100) / 100 : null;
+				data.rsi = rsiValue !== null ? Math.round(rsiValue * 100) / 100 : null;
+
 				return data;
 			}));
 			
@@ -56,6 +103,3 @@ export async function handlePolygonRequest(request, env, corsHeaders) {
 		}
 
 }
-
-
-/* export { handlePolygonRequest }; */

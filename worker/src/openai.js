@@ -24,10 +24,14 @@ export async function handleOpenAIRequest(request, env, corsHeaders){
                          - 'h' means Highest Price of the day
                          - 'l' means Lowest Price of the day
                          - 'v' means Trading Volume
+                         - 'sma' is the 20-day Simple Moving Average of closing prices
+                         - 'rsi' is the 14-day Relative Strength Index (a 0-100 momentum score; above 70 is
+                         generally considered overbought, below 30 oversold, 50 is neutral)
 
-                         Identify whether the stock was on an uptrend, downtrend, or trading sideways during
-                         the period (and note any clear shift between these), based only on the price data
-                         given. Keep the summary concise and to the point.
+                         Reference the SMA and RSI values directly in your summary — for example, note whether
+                         the most recent closing price is trading above or below the SMA, and what the RSI value
+                         suggests about recent momentum. Identify whether the stock was on an uptrend, downtrend,
+                         or trading sideways during the period, based on the price data given.
 
                          Do not recommend whether to buy, hold, or sell. Do not speculate about future price
                          movement. Do not use sentiment language like "bullish" or "bearish." Keep your tone
