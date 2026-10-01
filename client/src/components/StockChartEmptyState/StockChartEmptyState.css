@@ -1,0 +1,60 @@
+.stock-chart-empty-state {
+  margin: auto;
+  max-width: 1000px;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  background: var(--color-surface);
+  border: var(--border-width) var(--border-style) var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.stock-chart-empty-state__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 360px;
+  text-align: center;
+}
+
+.stock-chart-empty-state__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: var(--space-3);
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+  border-radius: var(--radius-control);
+}
+
+.stock-chart-empty-state__icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.stock-chart-empty-state__title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-card-heading);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-heading);
+  letter-spacing: var(--letter-spacing-heading);
+}
+
+.stock-chart-empty-state__description {
+  max-width: 320px;
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-muted);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-body-small);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-body);
+}

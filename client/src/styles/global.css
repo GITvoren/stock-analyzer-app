@@ -1,0 +1,58 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-page-surround);
+  color: var(--color-text-primary);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  background-color: var(--color-surface);
+}
+
+.stock-analyzer-app-container {
+  padding-top: 2rem;
+  padding-bottom: 5rem;
+  position: relative;
+  max-width: 1400px;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--color-surface);
+  margin-inline: auto; 
+  padding-inline: clamp(1rem, 3vw, 2rem); 
+}
+
+
+.brand-logo-container {
+  max-width: 500px;
+  margin: auto;
+  padding: 2rem;
+}
+
+.brand-logo-light, .brand-logo-dark {
+  width: 100%;
+  height: 100%;
+}
+
+.brand-logo-dark {
+  display: none;
+}
+
+[data-theme="dark"] .brand-logo-light {
+  display: none;
+}
+
+[data-theme="dark"] .brand-logo-dark {
+  display: block;
+}
+
+.theme-toggle {
+  position: absolute;
+  top: 5rem;
+  right: 14rem;
+}

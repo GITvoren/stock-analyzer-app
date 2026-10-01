@@ -1,0 +1,280 @@
+.stock-ticker-container {
+  width: 100%;
+  max-width: 1000px;
+  margin: auto;
+  margin-bottom: 2rem;
+}
+/* =========================================================
+   STOCK TICKER
+   ========================================================= */
+
+.stock-ticker {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-2);
+
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   NAVIGATION BUTTONS
+   ========================================================= */
+
+.stock-ticker__navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+
+  width: 40px;
+  height: 40px;
+  padding: 0;
+
+  background: var(--color-surface);
+  border: var(--border-width) var(--border-style) var(--color-border);
+  border-radius: var(--radius-control);
+  box-shadow: var(--shadow-subtle);
+
+  color: var(--color-text-secondary);
+
+  cursor: pointer;
+
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease,
+    opacity 180ms ease;
+}
+
+.stock-ticker__navigation:hover:not(:disabled) {
+  border-color: var(--color-border-strong);
+  background: var(--color-surface-soft);
+  color: var(--color-text-primary);
+}
+
+.stock-ticker__navigation:focus-visible {
+  outline: none;
+
+  border-color: var(--color-border-strong);
+
+  box-shadow:
+    var(--shadow-subtle),
+    0 0 0 2px rgba(52, 148, 116, 0.08);
+}
+
+.stock-ticker__navigation:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: var(--shadow-none);
+}
+
+.stock-ticker__navigation:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+
+.stock-ticker__navigation svg {
+  width: 18px;
+  height: 18px;
+}
+
+
+/* =========================================================
+   SLIDING VIEWPORT
+   ========================================================= */
+
+.stock-ticker__viewport {
+  flex: 1 1 auto;
+  min-width: 0;
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   SLIDING TRACK
+   ========================================================= */
+
+.stock-ticker__track {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-2);
+
+  width: max-content;
+
+  transition: transform 220ms ease;
+  will-change: transform;
+}
+
+
+/* =========================================================
+   STOCK CARD
+   ========================================================= */
+
+.stock-ticker__item {
+  display: flex;
+  align-items: center;
+  flex: 0 0 96px;
+
+  width: 96px;
+  height: 40px;
+  box-sizing: border-box;
+
+  padding: var(--space-2);
+
+  background: var(--color-surface);
+
+  border:
+    var(--border-width)
+    var(--border-style)
+    var(--color-border);
+
+  border-radius: var(--radius-control);
+
+  box-shadow: var(--shadow-subtle);
+
+  color: var(--color-text-primary);
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.stock-ticker__item:hover:not(:disabled) {
+  border-color: var(--color-border-strong);
+  background: var(--color-surface-soft);
+}
+
+.stock-ticker__item:focus-visible {
+  outline: none;
+
+  border-color: var(--color-border-strong);
+
+  box-shadow:
+    var(--shadow-subtle),
+    0 0 0 2px rgba(52, 148, 116, 0.08);
+}
+
+.stock-ticker__item:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: var(--shadow-none);
+}
+
+.stock-ticker__item:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+
+/* =========================================================
+   LOGO ASSET SLOT
+   ========================================================= */
+
+.stock-ticker__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 auto;
+
+  width: 24px;
+  height: 24px;
+
+  margin-right: var(--space-2);
+
+  overflow: hidden;
+
+  border-radius: var(--radius-sm);
+}
+
+.stock-ticker__logo-image {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+}
+
+
+/* =========================================================
+   STOCK INFORMATION
+   ========================================================= */
+
+.stock-ticker__info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  min-width: 0;
+
+  gap: 1px;
+}
+
+
+/* Ticker symbol */
+
+.stock-ticker__symbol {
+  overflow: hidden;
+
+  color: var(--color-text-primary);
+
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-semibold);
+
+  line-height: var(--line-height-tight);
+
+  letter-spacing: var(--letter-spacing-normal);
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+
+/* Company name */
+
+.stock-ticker__company {
+  overflow: hidden;
+
+  color: var(--color-text-muted);
+
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-regular);
+
+  line-height: var(--line-height-tight);
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 560px) {
+  .stock-ticker__item {
+    flex-basis: 88px;
+    width: 88px;
+  }
+
+  .stock-ticker__logo {
+    width: 22px;
+    height: 22px;
+  }
+
+  .stock-ticker__navigation {
+    width: 40px;
+  }
+}

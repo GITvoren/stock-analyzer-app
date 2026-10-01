@@ -1,0 +1,30 @@
+.developed-by-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4) var(--space-6);
+  border-top: var(--border-width) var(--border-style) var(--color-border);
+  background: var(--color-surface);
+  box-sizing: border-box;
+}
+
+.developed-by-footer__text {
+  color: var(--color-text-muted);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-metadata);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-body);
+  letter-spacing: var(--letter-spacing-normal);
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .developed-by-footer {
+    padding-inline: var(--space-4);
+  }
+}

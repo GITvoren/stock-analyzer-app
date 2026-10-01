@@ -1,0 +1,129 @@
+.financial-disclaimer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 34px;
+  padding: var(--space-1) var(--space-2);
+
+  background: var(--color-warning-soft);
+  border: var(--border-width) var(--border-style) var(--color-warning-soft);
+  border-radius: var(--radius-sm);
+
+  color: var(--color-text-secondary);
+  font-family: var(--font-family-sans);
+
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.financial-disclaimer__warning {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+
+  color: var(--color-warning);
+}
+
+.financial-disclaimer__warning svg {
+  width: 15px;
+  height: 15px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.financial-disclaimer__content {
+  color: #505050;
+  display: block;
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-subheading);
+}
+
+.financial-disclaimer__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  margin-left: auto;
+  padding: 0;
+
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: #3a3a3a;
+  cursor: pointer;
+
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.financial-disclaimer__close svg {
+  width: 12px;
+  height: 12px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+
+.financial-disclaimer__close:hover {
+  background: var(--color-warning-soft);
+  color: var(--color-text-primary);
+}
+
+.financial-disclaimer__close:active {
+  transform: scale(0.94);
+}
+
+.financial-disclaimer__close:focus-visible {
+  outline: none;
+  color: var(--color-text-primary);
+  box-shadow:
+    0 0 0 2px color-mix(
+      in srgb,
+      var(--color-warning) 18%,
+      transparent
+    );
+}
+
+@media (max-width: 700px) {
+  .financial-disclaimer {
+    align-items: flex-start;
+  }
+
+  .financial-disclaimer__content {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .financial-disclaimer__title {
+    white-space: normal;
+  }
+
+  .financial-disclaimer__close {
+    margin-top: -2px;
+  }
+}
+

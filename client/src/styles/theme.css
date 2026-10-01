@@ -1,0 +1,208 @@
+:root {
+  /* ========================================
+     COLOR SYSTEM
+     ======================================== */
+
+  --color-primary: #349474;
+  --color-primary-dark: #287A60;
+  --color-primary-soft: #E7F0EE;
+
+  --color-secondary: #6B7280;
+
+  --color-background: #FEFEFE;
+
+  --color-surface: #FFFFFF;
+  --color-surface-soft: #F5F9F8;
+  --color-surface-muted: #F8FAFA;
+
+  --color-border: #E3E9E7;
+  --color-border-strong: #CFD9D6;
+
+  --color-text-primary: #222222;
+  --color-text-secondary: #4A4D52;
+  --color-text-muted: #7E8187;
+  --color-text-disabled: #A8ADB0;
+
+  /* ========================================
+     ACCENTS
+     ======================================== */
+
+  --color-accent-green: #349474;
+  --color-accent-green-bright: #52A98A;
+  --color-accent-green-pale: #DDEFE9;
+  --color-accent-mint: #EAF5F1;
+
+  --color-accent-blue: #4387C9;
+  --color-accent-blue-soft: #EAF2FB;
+
+  --color-accent-purple: #8D76E8;
+  --color-accent-purple-soft: #F0EDFC;
+
+  /* ========================================
+     STATUS / FEEDBACK
+     ======================================== */
+
+  --color-success: #349474;
+  --color-success-soft: #E7F3EF;
+
+  --color-warning: #E9B52E;
+  --color-warning-soft: #FFF0C6;
+
+  --color-error: #D93A32;
+  --color-error-soft: #FCEAE8;
+
+  --color-info: #4387C9;
+  --color-info-soft: #EAF2FB;
+
+  /* ========================================
+     TYPOGRAPHY
+     ======================================== */
+
+  --font-family-sans:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+
+  --font-family-mono:
+    "SFMono-Regular",
+    Consolas,
+    "Liberation Mono",
+    Menlo,
+    monospace;
+
+  --font-size-page-title: 24px;
+  --font-size-section-heading: 18px;
+  --font-size-card-heading: 16px;
+  --font-size-subheading: 14px;
+  --font-size-body: 14px;
+  --font-size-body-small: 13px;
+  --font-size-label: 12px;
+  --font-size-metadata: 11px;
+  --font-size-caption: 10px;
+  --font-size-metric: 24px;
+  --font-size-large-metric: 32px;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --line-height-tight: 1.15;
+  --line-height-heading: 1.25;
+  --line-height-subheading: 1.4;
+  --line-height-body: 1.5;
+  --line-height-relaxed: 1.6;
+
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-heading: -0.02em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-label: 0.01em;
+
+  /* ========================================
+     BORDER RADIUS
+     ======================================== */
+
+  --radius-sm: 8px;
+  --radius-md: 9px;
+  --radius-control: 10px;
+  --radius-card: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 999px;
+
+  /* ========================================
+     BORDER
+     ======================================== */
+
+  --border-width: 1px;
+  --border-style: solid;
+
+  /* ========================================
+     SHADOWS
+     ======================================== */
+
+  --shadow-none: none;
+
+  --shadow-subtle:
+    0 1px 3px rgba(20, 35, 30, 0.04);
+
+  --shadow-card:
+    0 1px 3px rgba(20, 35, 30, 0.04);
+
+  --shadow-floating:
+    0 4px 12px rgba(20, 35, 30, 0.07);
+
+  --shadow-modal:
+    0 10px 30px rgba(20, 35, 30, 0.10);
+
+  /* ========================================
+     SPACING
+     ======================================== */
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+  --space-9: 48px;
+  --space-10: 64px;
+
+  /* ========================================
+     COMMON COMPONENT PADDING
+     ======================================== */
+
+  --padding-control-y: 10px;
+  --padding-control-x: 12px;
+
+  --padding-card: 16px;
+  --padding-card-large: 20px;
+  --padding-section: 24px;
+
+  /* ========================================
+     DESIGN CHARACTER
+     ======================================== */
+
+  --design-density: medium-low;
+
+  --design-style:
+    professional,
+    minimal,
+    analytical,
+    modern,
+    calm,
+    technical;
+
+  --design-elevation-priority: border-and-whitespace;
+}
+
+[data-theme="dark"] {
+  --color-primary: #49A987;
+  --color-primary-dark: #3B9274;
+  --color-primary-soft: #19352E;
+
+  --color-surface: #1d2027;
+  --color-surface-soft: #1D211F;
+  --color-surface-muted: #202522;
+
+  --color-border: #585858;
+  --color-border-strong: #424A46;
+
+  --color-text-primary: #F1F4F3;
+  --color-text-secondary: #C3CAC7;
+  --color-text-muted: #8F9995;
+  --color-text-disabled: #626B67;
+
+  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.20);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.20);
+  --shadow-floating: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --shadow-modal: 0 10px 30px rgba(0, 0, 0, 0.30);
+
+}

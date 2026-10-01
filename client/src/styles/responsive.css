@@ -1,0 +1,32 @@
+@media(max-width: 500px) {
+     .stock-chart-card{
+           padding: 0.5rem!important;
+     }
+
+     .brand-logo-container {
+          padding: 0;
+          padding-top: 1rem;
+          max-width: 300px;
+     }
+
+     .stock-search{
+          margin: 1rem auto!important;
+
+     }
+
+     .stock-ticker-container{
+          margin-bottom: 1rem;
+     }
+
+     .theme-toggle {
+          position: static; 
+          display: block;       
+          margin-inline: auto;
+     }
+
+     .theme-toggle-container{
+          text-align: center;
+          margin-top: 2rem;
+     }
+
+}
