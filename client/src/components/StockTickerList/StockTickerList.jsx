@@ -1,48 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./StockTickerList.css";
+import tickersInfo from '../../data/tickersInfo.json';
 
-const defaultStocks = [
-  {
-    symbol: "AAPL",
-    company: "Apple Inc.",
-    logoSrc: "",
-  },
-  {
-    symbol: "TSLA",
-    company: "Tesla, Inc.",
-    logoSrc: "",
-  },
-  {
-    symbol: "MSFT",
-    company: "Microsoft Corp.",
-    logoSrc: "",
-  },
-  {
-    symbol: "NVDA",
-    company: "NVIDIA Corp.",
-    logoSrc: "",
-  },
-  {
-    symbol: "AMZN",
-    company: "Amazon.com Inc.",
-    logoSrc: "",
-  },
-  {
-    symbol: "GOOGL",
-    company: "Alphabet Inc.",
-    logoSrc: "",
-  },
-  {
-    symbol: "META",
-    company: "Meta Platforms",
-    logoSrc: "",
-  },
-  {
-    symbol: "NFLX",
-    company: "Netflix Inc.",
-    logoSrc: "",
-  },
-];
+const defaultStocks = tickersInfo
 
 function StockTickerList({
   stocks = defaultStocks,
@@ -50,9 +10,25 @@ function StockTickerList({
   disabled = false,
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [visibleItems, setVisibleItems] = useState(4);
+   const viewportRef = useRef(null);
+  const featuredStocks = stocks.filter(stock => stock.featured)
 
-  const visibleItems = 4;
-  const maxIndex = Math.max(stocks.length - visibleItems, 0);
+    useEffect(() => {
+    function calculateVisibleItems() {
+      if (!viewportRef.current) return;
+      const itemWidth = 96 + 8;
+      const viewportWidth = viewportRef.current.offsetWidth;
+      setVisibleItems(Math.max(Math.floor(viewportWidth / itemWidth), 1));
+    }
+
+    calculateVisibleItems();
+    window.addEventListener('resize', calculateVisibleItems);
+    return () => window.removeEventListener('resize', calculateVisibleItems);
+  }, []);
+
+
+  const maxIndex = Math.max(featuredStocks.length - visibleItems, 0);
 
   const canGoPrevious = currentIndex > 0;
   const canGoNext = currentIndex < maxIndex;
@@ -93,27 +69,27 @@ function StockTickerList({
                </svg>
                </button>
 
-               <div className="stock-ticker__viewport">
+               <div className="stock-ticker__viewport" ref={viewportRef}>
                <div
                     className="stock-ticker__track"
                     style={{
                     transform: `translateX(calc(-${currentIndex} * (96px + 8px)))`,
                     }}
                >
-                    {stocks.map((stock) => (
+                    {featuredStocks.map((stock) => (
                     <button
-                    key={stock.symbol}
+                    key={stock.ticker}
                     type="button"
                     className="stock-ticker__item"
-                    onClick={() => onSelect?.(stock)}
+                    onClick={() => onSelect?.(stock.ticker)}
                     disabled={disabled}
-                    aria-label={`Select ${stock.symbol}`}
+                    aria-label={`Select ${stock.ticker}`}
                     >
                     <span className="stock-ticker__logo" aria-hidden="true">
                          {stock.logoSrc ? (
                          <img
                               src={stock.logoSrc}
-                              alt=""
+                              alt="apple-logo"
                               className="stock-ticker__logo-image"
                          />
                          ) : null}
@@ -121,14 +97,14 @@ function StockTickerList({
 
                     <span 
                     className="stock-ticker__info"
-                    title={stock.company}
+                    title={stock.name}
                     >
                          <span className="stock-ticker__symbol">
-                         {stock.symbol}
+                         {stock.ticker}
                          </span>
 
                          <span className="stock-ticker__company">
-                         {stock.company}
+                         {stock.name}
                          </span>
                     </span>
                     </button>

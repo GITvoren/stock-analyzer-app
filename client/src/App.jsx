@@ -13,6 +13,16 @@ function App() {
   const [result, setResult] = useState(null);
   const [aiResult, setAiResult] = useState(null);
   const [isTickerQueried, setIsTickerQueried] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+
+  const handleSearch = async () => {
+
+	const ticker = inputValue.replace(/\s+/g, '').toUpperCase();
+	if(!ticker) return;
+
+     console.log(`Fetching Polygon data for: ${ticker}`);
+     console.log(`Analyzing ${ticker} with OpenAI...`);
+  }
 
   function formatDate(date) {
 	const yyyy = date.getFullYear();
@@ -70,7 +80,7 @@ async function testOpenAI() {
   return (
     <>
 
-	<div class="stock-analyzer-app-container">
+	<div className="stock-analyzer-app-container">
 		<FinancialDisclaimer />
 		<ThemeToggle />
 		<div className="brand-logo-container">
@@ -89,8 +99,12 @@ async function testOpenAI() {
 		</div>
 		
 	{/* 	<Spinner /> */}
-		<StockSearchBar />
-		<StockTickerList />
+		<StockSearchBar
+		inputValue = {inputValue}
+		setInputValue = {setInputValue}
+		onSearch = {handleSearch}
+		 />
+		<StockTickerList onSelect={ ticker => setInputValue(ticker)} />
 		{
 			isTickerQueried ?
 

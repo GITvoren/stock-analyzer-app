@@ -20,6 +20,12 @@
     background-color 180ms ease;
 }
 
+.stock-search__button{
+  background-color: none;
+  background: none;
+  border: none;
+}
+
 .stock-search:hover:not(:has(input:disabled)) {
   border-color: var(--color-border-strong);
 }

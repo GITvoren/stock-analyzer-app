@@ -1,44 +1,8 @@
 import { useMemo, useState } from 'react';
 import './OtherTickerList.css';
+import tickersInfo from '../../data/tickersInfo.json';
 
-const tickers = [
-  { ticker: 'GOOGL', name: 'Alphabet' },
-  { ticker: 'AMZN', name: 'Amazon' },
-  { ticker: 'META', name: 'Meta Platforms' },
-  { ticker: 'NFLX', name: 'Netflix' },
-  { ticker: 'DIS', name: 'Disney' },
-  { ticker: 'KO', name: 'Coca-Cola' },
-  { ticker: 'NKE', name: 'Nike' },
-  { ticker: 'SBUX', name: 'Starbucks' },
-  { ticker: 'MCD', name: "McDonald's" },
-  { ticker: 'WMT', name: 'Walmart' },
-  { ticker: 'PEP', name: 'PepsiCo' },
-  { ticker: 'COST', name: 'Costco' },
-  { ticker: 'HD', name: 'Home Depot' },
-  { ticker: 'TGT', name: 'Target' },
-  { ticker: 'CMG', name: 'Chipotle' },
-  { ticker: 'LLY', name: 'Eli Lilly' },
-  { ticker: 'JNJ', name: 'Johnson & Johnson' },
-  { ticker: 'PFE', name: 'Pfizer' },
-  { ticker: 'PG', name: 'Procter & Gamble' },
-  { ticker: 'V', name: 'Visa' },
-  { ticker: 'MA', name: 'Mastercard' },
-  { ticker: 'PYPL', name: 'PayPal' },
-  { ticker: 'BAC', name: 'Bank of America' },
-  { ticker: 'JPM', name: 'JPMorgan Chase' },
-  { ticker: 'SNE', name: 'Sony' },
-  { ticker: 'UBER', name: 'Uber' },
-  { ticker: 'ABNB', name: 'Airbnb' },
-  { ticker: 'SPOT', name: 'Spotify' },
-  { ticker: 'EBAY', name: 'eBay' },
-  { ticker: 'F', name: 'Ford' },
-  { ticker: 'GM', name: 'General Motors' },
-  { ticker: 'RACE', name: 'Ferrari' },
-  { ticker: 'DAL', name: 'Delta Air Lines' },
-  { ticker: 'MAR', name: 'Marriott' },
-  { ticker: 'ORCL', name: 'Oracle' },
-  { ticker: 'AMD', name: 'Advanced Micro Devices' },
-];
+const tickers = tickersInfo
 
 const PAGE_SIZE = 12;
 
