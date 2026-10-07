@@ -1,7 +1,7 @@
 import React from "react";
 import "./KeyIndicators.css";
 
-const defaultIndicators = [
+/* const defaultIndicators = [
   {
     label: "Last Close",
     value: "198.53",
@@ -27,7 +27,7 @@ const defaultIndicators = [
     icon: "rsi",
   },
 ];
-
+ */
 function IndicatorIcon({ type }) {
   if (type === "trend") {
     return (
@@ -69,7 +69,7 @@ function InfoIcon() {
 }
 
 export default function KeyIndicators({
-  indicators = defaultIndicators,
+  indicators,
   onIndicatorClick,
 }) {
   return (

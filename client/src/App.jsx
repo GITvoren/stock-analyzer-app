@@ -8,74 +8,116 @@ import Spinner from '/src/components/Spinner/Spinner.jsx'
 import FinancialDisclaimer from '/src/components/FinancialDisclaimer/FinancialDisclaimer.jsx'
 import Footer from '/src/components/Footer/Footer.jsx'
 import OtherTickerList from '/src/components/OtherTickerList/OtherTickerList.jsx'
+import tickersInfo from './data/tickersInfo.json';
 
 function App() {
-  const [result, setResult] = useState(null);
-  const [aiResult, setAiResult] = useState(null);
+  const [polygonResult, setPolygonResult] = useState(null);
+  const [openAiResult, setOpenAiResult] = useState(null);
   const [isTickerQueried, setIsTickerQueried] = useState(false);
   const [inputValue, setInputValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+/*   const [dateRange, setDateRange] = useState(''); */
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
+
+  	function formatDate(date) {
+		const yyyy = date.getFullYear();
+		const mm = String(date.getMonth() + 1).padStart(2, '0');
+		const dd = String(date.getDate()).padStart(2, '0');
+		return `${yyyy}-${mm}-${dd}`;
+	}
+
+	function getLastNDays(n) {
+		const endDate = new Date();
+		const startDate = new Date();
+		startDate.setDate(startDate.getDate() - n);
+
+		return {
+			startDate: formatDate(startDate),
+			endDate: formatDate(endDate)
+		};
+	}
 
   const handleSearch = async () => {
 
 	const ticker = inputValue.replace(/\s+/g, '').toUpperCase();
 	if(!ticker) return;
 
-     console.log(`Fetching Polygon data for: ${ticker}`);
-     console.log(`Analyzing ${ticker} with OpenAI...`);
-  }
+	setIsLoading(true);
+	setErrorMessage(null);
+	setIsTickerQueried(false);
 
-  function formatDate(date) {
-	const yyyy = date.getFullYear();
-	const mm = String(date.getMonth() + 1).padStart(2, '0');
-	const dd = String(date.getDate()).padStart(2, '0');
-	return `${yyyy}-${mm}-${dd}`;
-}
-
-function getLastNDays(n) {
-	const endDate = new Date();
-	const startDate = new Date();
-	startDate.setDate(startDate.getDate() - n);
-
-	return {
-		startDate: formatDate(startDate),
-		endDate: formatDate(endDate)
-	};
-}
-
- async function testFetch() {
 	const { startDate, endDate } = getLastNDays(40);
 
-	const response = await fetch('http://localhost:8787/polygon', {
+setStartDate(new Date(startDate.replace(/-/g, '/')).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }));
+setEndDate(new Date(endDate.replace(/-/g, '/')).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }));
+
+/* 	setDateRange(
+  `${new Date(startDate.replace(/-/g, '/')).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} – ${new Date(endDate.replace(/-/g, '/')).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`
+); */
+
+     const polygonResponse = await fetch('http://localhost:8787/polygon', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({
-			tickersArr: ['TSLA'],
+			tickersArr: [ticker],
 			startDate,
 			endDate
 		})
 	});
+	const polygonData = await polygonResponse.json();
 
-	const data = await response.json();
-	setResult(data);
+	if (polygonResponse.status === 429) {
+		setErrorMessage('Free data plan limit: 5 requests per minute. Please wait a moment before searching again.');
+		setIsLoading(false);
+		return;
+	}
+
+	if (!polygonResponse.ok || polygonData.length === 0) {
+		setErrorMessage(`No data found for "${ticker}". Check the ticker and try again.`);
+		setIsLoading(false);
+		return;
+	}
+
+	console.log(polygonData)
+	setPolygonResult(polygonData);
+
+	const tickerNames = [polygonData[0].ticker];
+
+	const openaiResponse = await fetch('http://localhost:8787/openai', {
+	method: 'POST',
+	headers: { 'Content-Type': 'application/json' },
+	body: JSON.stringify({
+		tickerNames,
+		dataString: JSON.stringify(polygonData)
+	})
+});
+
+	const openaiData = await openaiResponse.json();
+
+	if (!openaiResponse.ok) {
+	setErrorMessage('Could not generate AI analysis. Please try again.');
+	setIsLoading(false);
+	return;
+}
+	console.log(openaiData)
+	setOpenAiResult(openaiData);
+	setIsTickerQueried(true);
+	setIsLoading(false);
+
+
+  }
+
+  function getCompanyInfo(ticker) {
+	const match = tickersInfo.find(stock => stock.ticker === ticker);
+	return {
+		name: match ? match.name : ticker,
+		logoSrc: match ? match.logoSrc : undefined
+	};
 }
 
-async function testOpenAI() {
-	const tickerNames = result.map(stock => stock.ticker);
-
-	const response = await fetch('http://localhost:8787/openai', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({
-			tickerNames,
-			dataString: JSON.stringify(result)
-		})
-	});
-
-	const data = await response.json();
-	setAiResult(data);
-}
+	const companyInfo = polygonResult ? getCompanyInfo(polygonResult[0].ticker) : null;
 
   return (
     <>
@@ -98,30 +140,40 @@ async function testOpenAI() {
 			/>
 		</div>
 		
-	{/* 	<Spinner /> */}
+
 		<StockSearchBar
 		inputValue = {inputValue}
 		setInputValue = {setInputValue}
 		onSearch = {handleSearch}
 		 />
 		<StockTickerList onSelect={ ticker => setInputValue(ticker)} />
+
 		{
-			isTickerQueried ?
+			isLoading ? (
+				<div className="spinner-container">
+					<Spinner />
+				</div>
+			) : isTickerQueried ? (
 
-			<StockAnalysisContainer />
+			<StockAnalysisContainer
+			 ticker={polygonResult[0].ticker}
+			 company={companyInfo.name}
+			 logoSrc={companyInfo.logoSrc}
+			 data={polygonResult[0]}
+			 startDate={startDate}
+			 endDate={endDate}
+			 aiInsight={openAiResult.message}
+			 />
 
-		:
-			<StockChartEmptyState />
-		}
+		) : (
+			 <StockChartEmptyState />
+		)}
+
 		<OtherTickerList />
 		<Footer />
 	</div>
 
-{/*  <button onClick={testFetch}>Fetch Stock Data</button>
-      <pre>{ JSON.stringify(result) }</pre>
 
-	<button onClick={testOpenAI}>Test OpenAI</button>
-	<pre>{JSON.stringify(aiResult)}</pre> */}
     </>
   );
 }

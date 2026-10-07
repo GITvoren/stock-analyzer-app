@@ -4,12 +4,62 @@ import KeyIndicators from '../KeyIndicators/KeyIndicators.jsx'
 import AIInsight from '../AIInsight/AIInsight.jsx'
 
 const StockChartCard = ({
-  company = "Apple Inc.",
-  ticker = "AAPL",
-  dateRange = "Feb 14, 2025 – May 14, 2025",
+  company,
+  ticker,
+  startDate,
+  endDate,
   logoSrc,
+  aiInsight,
+  data,
   children,
 }) => {
+
+  function buildIndicators(data) {
+	if (!data || !data.results || data.results.length === 0) return [];
+
+	const lastDay = data.results[data.results.length - 1];
+	const lastDate = new Date(lastDay.t).toLocaleDateString('en-US', {
+		month: 'long', day: 'numeric', year: 'numeric'
+	});
+
+	return [
+		{
+			label: 'Last Close',
+			value: lastDay.c.toFixed(2),
+			unit: 'USD',
+			date: lastDate,
+			tone: 'green',
+			icon: 'trend'
+		},
+		{
+			label: '20-Day SMA',
+			value: data.sma !== null ? data.sma.toFixed(2) : 'N/A',
+			unit: data.sma !== null ? 'USD' : '',
+			date: `As of ${lastDate}`,
+			tone: 'blue',
+			icon: 'average'
+		},
+		{
+			label: '14-Day RSI',
+			value: data.rsi !== null ? data.rsi.toFixed(2) : 'N/A',
+			unit: '',
+			date: `As of ${lastDate}`,
+			tone: 'purple',
+			icon: 'rsi'
+		}
+	];
+}
+
+function renderMarkdownBold(text) {
+	const parts = text.split(/(\*\*.*?\*\*)/g);
+	return parts.map((part, i) => {
+		if (part.startsWith('**') && part.endsWith('**')) {
+			return <strong key={i}>{part.slice(2, -2)}</strong>;
+		}
+		return part;
+	});
+}
+
   return (
     <section className="stock-chart-card">
       <header className="stock-chart-card__header">
@@ -35,14 +85,13 @@ const StockChartCard = ({
           <p className="stock-chart-card__metadata">
             <span>{ticker}</span>
             <span className="stock-chart-card__separator">·</span>
-            <span>{dateRange}</span>
+            <span>{startDate} – {endDate}</span>
           </p>
         </div>
       </header>
 
-        <KeyIndicators />
-        <AIInsight />
-
+        <KeyIndicators indicators={buildIndicators(data)}/>
+        <AIInsight body={<p>{renderMarkdownBold(aiInsight)}</p>}/>
 
 
       {children && (

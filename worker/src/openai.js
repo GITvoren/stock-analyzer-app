@@ -33,6 +33,11 @@ export async function handleOpenAIRequest(request, env, corsHeaders){
                          suggests about recent momentum. Identify whether the stock was on an uptrend, downtrend,
                          or trading sideways during the period, based on the price data given.
 
+                         Use markdown bold formatting (wrapping text in **double asterisks**) to highlight both
+                         key figures (closing prices, SMA, RSI) and the interpretive language around them (e.g.
+                         trend direction, "overbought"/"oversold"/"neutral" RSI zones, momentum descriptions
+                         like "positive momentum" or "weakening"). Do not bold every price mentioned — only the ones central to the overall takeaway. For example: "RSI of **63.51** suggests **positive momentum**, though it remains **below the overbought threshold**." Also use bold formatting on the ticker name itself, for example, TSLA, GOOGL, and such.
+
                          Do not recommend whether to buy, hold, or sell. Do not speculate about future price
                          movement. Do not use sentiment language like "bullish" or "bearish." Keep your tone
                          objective and professional, focused only on describing what the historical data shows.`

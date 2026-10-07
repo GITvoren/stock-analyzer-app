@@ -1,4 +1,4 @@
-.stock-chart-empty-state {
+.stock-chart-empty-state, .spinner-container {
   margin: auto;
   max-width: 1000px;
   width: 100%;
