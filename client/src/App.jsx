@@ -54,7 +54,7 @@ function App() {
 		setDisplayEndDate(new Date(endDate.replace(/-/g, '/')).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }));
 
 
-			const polygonResponse = await fetch('http://localhost:8787/polygon', {
+			const polygonResponse = await fetch(`${import.meta.env.VITE_WORKER_URL}/polygon`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
@@ -82,7 +82,7 @@ function App() {
 
 			const tickerNames = [polygonData[0].ticker];
 
-			const openaiResponse = await fetch('http://localhost:8787/openai', {
+			const openaiResponse = await fetch(`${import.meta.env.VITE_WORKER_URL}/openai`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
