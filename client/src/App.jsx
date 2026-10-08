@@ -17,9 +17,8 @@ function App() {
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
-/*   const [dateRange, setDateRange] = useState(''); */
-  const [startDate, setStartDate] = useState('')
-  const [endDate, setEndDate] = useState('')
+  const [displayStartDate, setDisplayStartDate] = useState('')
+  const [displayEndDate, setDisplayEndDate] = useState('')
 
   	function formatDate(date) {
 		const yyyy = date.getFullYear();
@@ -46,65 +45,72 @@ function App() {
 
 	setIsLoading(true);
 	setErrorMessage(null);
-	setIsTickerQueried(false);
 
-	const { startDate, endDate } = getLastNDays(40);
+	try {
 
-setStartDate(new Date(startDate.replace(/-/g, '/')).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }));
-setEndDate(new Date(endDate.replace(/-/g, '/')).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }));
+		const { startDate, endDate } = getLastNDays(40);
 
-/* 	setDateRange(
-  `${new Date(startDate.replace(/-/g, '/')).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} – ${new Date(endDate.replace(/-/g, '/')).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`
-); */
+		setDisplayStartDate(new Date(startDate.replace(/-/g, '/')).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }));
+		setDisplayEndDate(new Date(endDate.replace(/-/g, '/')).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }));
 
-     const polygonResponse = await fetch('http://localhost:8787/polygon', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({
-			tickersArr: [ticker],
-			startDate,
-			endDate
-		})
-	});
-	const polygonData = await polygonResponse.json();
 
-	if (polygonResponse.status === 429) {
-		setErrorMessage('Free data plan limit: 5 requests per minute. Please wait a moment before searching again.');
+			const polygonResponse = await fetch('http://localhost:8787/polygon', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					tickersArr: [ticker],
+					startDate,
+					endDate
+				})
+			});
+			const polygonData = await polygonResponse.json();
+
+			if (polygonResponse.status === 429) {
+				setErrorMessage('Free data plan limit: 5 requests per minute. Please wait a moment before searching again.');
+				setIsLoading(false);
+				return;
+			}
+
+			if (!polygonResponse.ok || polygonData.length === 0) {
+				setErrorMessage(`No data found for "${ticker}". Check the ticker and try again.`);
+				setIsLoading(false);
+				return;
+			}
+
+			/* console.log(polygonData) */
+			setPolygonResult(polygonData);
+
+			const tickerNames = [polygonData[0].ticker];
+
+			const openaiResponse = await fetch('http://localhost:8787/openai', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				tickerNames,
+				dataString: JSON.stringify(polygonData)
+			})
+		});
+
+			const openaiData = await openaiResponse.json();
+
+			if (!openaiResponse.ok) {
+			setErrorMessage('Could not generate AI analysis. Please try again.');
+			setIsLoading(false);
+			return;
+		}
+			/* console.log(openaiData) */
+			setOpenAiResult(openaiData);
+			setIsTickerQueried(true);
+			setIsLoading(false);
+
+
+	} catch (err) {
+		console.error(err);
+		setErrorMessage('Something went wrong. Please try again.');
 		setIsLoading(false);
-		return;
+		
 	}
 
-	if (!polygonResponse.ok || polygonData.length === 0) {
-		setErrorMessage(`No data found for "${ticker}". Check the ticker and try again.`);
-		setIsLoading(false);
-		return;
-	}
-
-	console.log(polygonData)
-	setPolygonResult(polygonData);
-
-	const tickerNames = [polygonData[0].ticker];
-
-	const openaiResponse = await fetch('http://localhost:8787/openai', {
-	method: 'POST',
-	headers: { 'Content-Type': 'application/json' },
-	body: JSON.stringify({
-		tickerNames,
-		dataString: JSON.stringify(polygonData)
-	})
-});
-
-	const openaiData = await openaiResponse.json();
-
-	if (!openaiResponse.ok) {
-	setErrorMessage('Could not generate AI analysis. Please try again.');
-	setIsLoading(false);
-	return;
-}
-	console.log(openaiData)
-	setOpenAiResult(openaiData);
-	setIsTickerQueried(true);
-	setIsLoading(false);
 
 
   }
@@ -147,7 +153,11 @@ setEndDate(new Date(endDate.replace(/-/g, '/')).toLocaleDateString('en-US', { mo
 		onSearch = {handleSearch}
 		 />
 		<StockTickerList onSelect={ ticker => setInputValue(ticker)} />
-
+				{ errorMessage && (
+					<div className="error-message-container">
+						<p className="error-message">{errorMessage}</p>
+					</div>
+			)}
 		{
 			isLoading ? (
 				<div className="spinner-container">
@@ -160,12 +170,12 @@ setEndDate(new Date(endDate.replace(/-/g, '/')).toLocaleDateString('en-US', { mo
 			 company={companyInfo.name}
 			 logoSrc={companyInfo.logoSrc}
 			 data={polygonResult[0]}
-			 startDate={startDate}
-			 endDate={endDate}
+			 displayStartDate={displayStartDate}
+			 displayEndDate={displayEndDate}
 			 aiInsight={openAiResult.message}
 			 />
 
-		) : (
+		) : errorMessage ? null : (
 			 <StockChartEmptyState />
 		)}
 

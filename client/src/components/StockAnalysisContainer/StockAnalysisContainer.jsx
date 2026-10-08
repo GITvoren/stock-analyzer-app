@@ -6,8 +6,8 @@ import AIInsight from '../AIInsight/AIInsight.jsx'
 const StockChartCard = ({
   company,
   ticker,
-  startDate,
-  endDate,
+  displayStartDate,
+  displayEndDate,
   logoSrc,
   aiInsight,
   data,
@@ -85,7 +85,7 @@ function renderMarkdownBold(text) {
           <p className="stock-chart-card__metadata">
             <span>{ticker}</span>
             <span className="stock-chart-card__separator">·</span>
-            <span>{startDate} – {endDate}</span>
+            <span>{displayStartDate} – {displayEndDate}</span>
           </p>
         </div>
       </header>

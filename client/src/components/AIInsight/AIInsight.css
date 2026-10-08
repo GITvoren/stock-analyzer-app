@@ -47,7 +47,7 @@
 
 .ai-insight__body {
   color: var(--color-text-secondary);
-  font-size: var(--font-size-body-small);
+  font-size: var(--font-size-body);
   font-weight: var(--font-weight-regular);
   line-height: var(--line-height-body);
 }
@@ -113,7 +113,8 @@
   }
 
   .ai-insight__body {
-    font-size: var(--font-size-caption);
+    font-size: var(--font-size-body-small);
+    text-align: justify;
     line-height: var(--line-height-body);
   }
 }
