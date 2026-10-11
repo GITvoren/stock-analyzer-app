@@ -50,3 +50,30 @@ itself, not just added as a disclaimer after the fact.
 - Compare concepts to Express equivalents where relevant.
 - Flag anything that might be outdated (API models, library versions, provider
   pricing/free tiers) and verify rather than assume.
+
+## Frontend Structure
+- Components live in `client/src/components/<Name>/`, each with a co-located `<Name>.jsx` and `<Name>.css`.
+- Styling uses design tokens from `src/styles/theme.css`. Dark mode is driven by `[data-theme="dark"]`.
+- `App.jsx` owns all search state and `handleSearch`, which calls `/polygon` and then `/openai`.
+  Use the fresh local response from the first fetch for the second request, not React state,
+  because state updates are not immediate.
+- Only one ticker is searched at a time. The worker still takes an array (`tickersArr`), so the
+  client always sends `[ticker]`.
+- The date window is the last 40 calendar days, so the 20-day SMA has enough trading days.
+- AI text arrives with `**bold**` markers and is rendered by a small parser. Do not use
+  `dangerouslySetInnerHTML` for model output.
+
+## Data
+- `src/data/tickersInfo.json` is the single source of truth for tickers. Entries with
+  `featured: true` show as chips with logos. All others appear in `OtherTickerList`.
+  A ticker never appears in both.
+- Unknown tickers fall back to showing the raw symbol and a letter badge instead of a logo.
+
+## Deployment
+- Worker: `npx wrangler deploy` from `worker/`. Deployed name is `clarity-api`.
+  Secrets are set per worker with `npx wrangler secret put` (`POLYGON_API_KEY`, `OPENAI_API_KEY`).
+  Renaming the worker creates a new worker with no secrets.
+- Client: deployed on Vercel with Root Directory set to `client`. `VITE_WORKER_URL` is set in
+  Vercel's environment variables, and locally in `client/.env.local`.
+- Vite bakes env vars in at build time, so changing one in Vercel requires a redeploy.
+- Never put API keys in `VITE_` variables, because they are public in the browser bundle.
